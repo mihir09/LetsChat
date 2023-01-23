@@ -1,0 +1,100 @@
+
+{% extends 'users/base.html' %}
+
+{% block title %}{{ room.name }}|{% endblock %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'room/css/main.css' %}">
+    <div class="p-10 lg:p-20 text-center">
+        <h1 class="text-3xl lg:text-6xl text-white">{{ room.name }}</h1>
+    </div>
+
+    <div class="container text-center justify-content-center" style="max-width: 600px">
+        <div class="chat-messages space-y-3" id="chat-messages">
+            {% for message in messages %}
+                <div class=" p-2 m-2 bg-gray-200" style="background-color:white;">
+                    <p class="bold"> {{ message.user.username}} </p>
+                    <p> {{ message.content }} </p>
+                </div>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container text-center " style=" max-width: 600px; margin-top: 1%; background-color:white">
+            <form method="post" action="." class="form-inline">
+
+
+                <input type="text" name="content" class=" m-1 p-3" style="max-width:100%; min-width:80%; border:0" placeholder="Your message..." id="chat-message-input">
+
+                <button class="btn btn-primary m-2 " style="background-color :#fd7e14;" id="chat-message-submit">Submit</button>
+
+            </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ room.slug|json_script:"json-roomname" }}
+{{ request.user.username|json_script:"json-username" }}
+
+<script>
+    const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + roomName
+        +'/'
+
+    );
+
+    chatSocket.onmessage = function(e){
+        console.log('onmessage')
+        const data = JSON.parse(e.data);
+
+        if (data.message){
+            let html = '<div class=" p-2 m-2 bg-gray-200" style="background-color:white;">';
+                html+='<p class="bold">'+ data.username +'</p>';
+                html+='<p>' + data.message + '</p> </div><br>';
+
+            document.querySelector('#chat-messages').innerHTML += html;
+
+            scrollToBottom();
+
+        } else{
+            alert('The message was empty!')
+        }
+    }
+    chatSocket.onclose = function(e){
+        console.log('onclose')
+    }
+    //
+
+    document.querySelector('#chat-message-submit').onclick = function(e){
+
+        e.preventDefault();
+
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+
+        chatSocket.send(JSON.stringify({
+            'message':message,
+            'username': userName,
+            'room': roomName,
+        }));
+        messageInputDom.value = '';
+        return false;
+    }
+
+    function scrollToBottom(){
+        const objDiv = document.querySelector('#chat-messages');
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    scrollToBottom();
+</script>
+{% endblock %}

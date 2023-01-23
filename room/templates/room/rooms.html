@@ -1,0 +1,24 @@
+
+{% extends 'users/base.html' %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'room/css/main.css' %}" type="text/css">
+    <div class="p-10 lg:p-20 text-center">
+        <h1 class="text-3xl lg:text-6xl text-white">Rooms</h1>
+    </div>
+
+    <div class="row">
+        {% for room in rooms %}
+            <div class="col-sm-2">
+                <div class="card" style="background-color:white">
+                    <div class="card-body text-center justify-content-center">
+                        <h5 class="card-title text-center">{{ room.name }}</h5>
+                        <a href="{% url 'room' room.slug %}" class="btn btn-primary block rounded-xl" style="background-color:#fd7e14">Join</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
