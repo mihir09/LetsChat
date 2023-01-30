@@ -21,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-be5rjodin8no255(gq(y%lanry$#_0&knvb6p90pgkblhsacra'
+# SECRET_KEY = 'django-insecure-be5rjodin8no255(gq(y%lanry$#_0&knvb6p90pgkblhsacra'
 #
 # # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
@@ -34,7 +35,7 @@ ROOT_URLCONF = f'{config("PROJECT_NAME")}.urls'
 
 WSGI_APPLICATION = f'{config("PROJECT_NAME")}.wsgi.application'
 
-ASGI_APPLICATION = f'{config("PROJECT_NAME")}.routing.application'
+ASGI_APPLICATION = f'{config("PROJECT_NAME")}.room.routing.application'
 
 
 ALLOWED_HOSTS += ['localhost', '127.0.0.1', '.ngrok.io']
