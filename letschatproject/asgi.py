@@ -13,10 +13,12 @@ from django.core.asgi import get_asgi_application
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'letschatproject.settings')
+django_asgi_app = get_asgi_application()
 
 from room import routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'letschatproject.settings')
+
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

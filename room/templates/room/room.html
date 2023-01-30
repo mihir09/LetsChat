@@ -24,7 +24,7 @@
 
     <div class="container text-center " style=" max-width: 600px; margin-top: 1%; background-color:white">
             <form method="post" action="." class="form-inline">
-
+                {% csrf_token %}
 
                 <input type="text" name="content" class=" m-1 p-3" style="max-width:100%; min-width:80%; border:0" placeholder="Your message..." id="chat-message-input">
 
@@ -43,14 +43,16 @@
 <script>
     const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
-    const chatSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/'
-        + roomName
-        +'/'
+    const ws_scheme = window.location.protocol == "https:"? "wss" : "ws";
+    const we_path = ws_scheme + '://' + window.location.host + '/ws/' + roomName+ ':8001/';
+    const chatSocket = new WebSocket(ws_path);
+<!--        'ws://'-->
+<!--        + '2.tcp.ngrok.io:18168'-->
+<!--        + '/ws/'-->
+<!--        + roomName-->
+<!--        +'/'-->
 
-    );
+
 
     chatSocket.onmessage = function(e){
         console.log('onmessage')

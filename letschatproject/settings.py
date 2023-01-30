@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os.path
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +22,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-be5rjodin8no255(gq(y%lanry$#_0&knvb6p90pgkblhsacra'
+#
+# # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = True
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ["146.190.164.195"]
+
+ROOT_URLCONF = f'{config("PROJECT_NAME")}.urls'
+
+WSGI_APPLICATION = f'{config("PROJECT_NAME")}.wsgi.application'
+
+ASGI_APPLICATION = f'{config("PROJECT_NAME")}.routing.application'
+
+
+ALLOWED_HOSTS += ['localhost', '127.0.0.1', '.ngrok.io']
 
 
 # Application definition
@@ -55,8 +67,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'letschatproject.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,9 +82,6 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'letschatproject.wsgi.application'
-ASGI_APPLICATION = 'letschatproject.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -128,17 +135,46 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config("DB_NAME"),
+        'USER': config("DB_USER"),
+        'PASSWORD': config("DB_PASSWORD"),
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_ENDPOINT_URL = config('AWS_S3_ENDPOINT_URL')
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = config('AWS_LOCATION')
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,'users/static'),
-    os.path.join(BASE_DIR,'room/static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
+
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+TEMP = os.path.join(BASE_DIR, 'temp')
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+BASE_URL = "http://146.190.164.195"
 
 CRISPY_TEMPELATE_PACK = 'bootstrap4'
 
@@ -146,3 +182,7 @@ LOGIN_REDIRECT_URL = '/rooms/'
 LOGOUT_REDIRECT_URL = '/'
 
 LOGIN_URL = '/login/'
+
+CSRF_TRUSTED_ORIGINS = ['https://2b0c-2600-6c51-7a7f-1243-819d-d4cb-add6-1fb9.ngrok.io']
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
