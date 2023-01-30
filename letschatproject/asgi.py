@@ -21,7 +21,7 @@ from room import routing
 
 
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
+    "http": django_asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter(
             routing.websocket_urlpatterns
