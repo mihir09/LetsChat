@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
-
+LANGUAGE_SESSION_KEY = '_language'
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'letschatproject.settings')
