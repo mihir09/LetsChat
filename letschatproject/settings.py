@@ -35,7 +35,7 @@ ROOT_URLCONF = f'{config("PROJECT_NAME")}.urls'
 
 WSGI_APPLICATION = f'{config("PROJECT_NAME")}.wsgi.application'
 
-ASGI_APPLICATION = f'{config("PROJECT_NAME")}.room.routing.application'
+ASGI_APPLICATION = f'routing.application'
 
 
 ALLOWED_HOSTS += ['localhost', '127.0.0.1', '.ngrok.io']
