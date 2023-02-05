@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-be5rjodin8no255(gq(y%lanry$#_0&knvb6p90pgkblhsacra
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["146.190.164.195"]
+ALLOWED_HOSTS = ["146.190.164.195","lets-chat.click", "www.lets-chat.click"]
 
 ROOT_URLCONF = f'{config("PROJECT_NAME")}.urls'
 
@@ -38,7 +38,7 @@ WSGI_APPLICATION = f'{config("PROJECT_NAME")}.wsgi.application'
 ASGI_APPLICATION = f'{config("PROJECT_NAME")}.asgi.application'
 
 
-ALLOWED_HOSTS += ['localhost', '127.0.0.1', '.ngrok.io']
+#ALLOWED_HOSTS += ['localhost', '127.0.0.1', '.ngrok.io']
 
 
 # Application definition
@@ -175,7 +175,7 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-BASE_URL = "http://146.190.164.195"
+BASE_URL = "lets-chat.click"
 
 CRISPY_TEMPELATE_PACK = 'bootstrap4'
 

@@ -44,7 +44,8 @@
     const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
     const userName = JSON.parse(document.getElementById('json-username').textContent);
     const ws_scheme = window.location.protocol == "https:"? "wss" : "ws";
-    const ws_path = ws_scheme + '://' + window.location.host + '/ws/' + roomName+ '/';
+    const ws_path = ws_scheme + '://' + window.location.host +  ":8001/" + 'ws/' + roomName + '/';
+    
     const chatSocket = new WebSocket(ws_path);
 <!--        'ws://'-->
 <!--        + '2.tcp.ngrok.io:18168'-->
